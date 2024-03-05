@@ -13,7 +13,8 @@ library(svglite)
 library(ggpubr)
 
 # load data - excludes center patch (not used in analyses) 
-pollination_2009 <- read.csv("founder_plant_2009.csv") # joined seed count data (structure level) with seed predation/structure count data (plant level)
+pollination_2009 <- read.csv("founder_plant_2009.csv") # joined seed count data (structure level) with seed predation/flowering structure count data (plant level)
+# 1 row = 1 structure -- viable/nonviable seed counts specific for each structure, other data duplicated for each structure on the same plant (live, reproductive, seed predation, etc.)
 
 pollination_2009 <- pollination_2009 %>%
   filter(patch != "A") # removing patch A (center patch) from analyses
