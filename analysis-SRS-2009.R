@@ -485,7 +485,7 @@ figure3 <- total_mod1_predict %>% ggplot(aes(x = x, y = predicted)) +
   theme(axis.text = element_text(size = 16)) +
   theme(axis.title = element_text(size = 18)) +
   theme(legend.position = "none")
-figure3 <- total_mod1_plot_rawdata + facet_grid(rows = vars(species), scales = "free") +
+figure3 <- figure3 + facet_grid(rows = vars(species), scales = "free") +
   theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270))
 figure3
 
