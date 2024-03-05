@@ -12,7 +12,7 @@ library(scales)
 library(svglite)
 library(ggpubr)
 
-# load data - excludes center patch (not used in analyses)
+# load data - excludes center patch (not used in analyses) 
 pollination_2009 <- read.csv("founder_plant_2009.csv") # joined seed count data (structure level) with seed predation/structure count data (plant level)
 
 pollination_2009 <- pollination_2009 %>%
