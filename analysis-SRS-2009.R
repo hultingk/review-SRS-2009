@@ -160,6 +160,15 @@ dev.off()
 
 
 #### pollination data wrangling: keeping only reproductive plants ####
+#count_repro_plants <- pollination_2009 %>% # calculating # of flowering structures per species in each patch
+#  mutate(no_axil_fl = ifelse(is.na(no_axil_fl), 0, no_axil_fl)) %>%
+#  mutate(flowering_structures = no_basal_fl + no_axil_fl) %>%
+#  mutate(patch_ID = paste(block, patch, species, sep = ".")) %>%
+#  group_by(patch_ID) %>%
+#  mutate(count_repro_plants = sum(flowering_structures, na.rm = TRUE)) %>%
+#  select(c("patch_ID", "count_repro_plants")) %>%
+#  distinct(patch_ID, .keep_all = TRUE) # keeping one per patch/species
+
 pollination_2009 <- pollination_2009 %>%
   filter(flags == 0) %>% # only using data with no flags for pollination/seed predation data
   filter(reproductive == 1) %>% # removing dead/non-reproductive plants from pollination analysis
@@ -206,6 +215,9 @@ pollination_2009 <- pollination_2009 %>%
   mutate(plant_seed_prod = round(plant_seed_prod)) %>% # rounding for analysis
   mutate(total_est_fl_avg = round(total_est_fl_avg))  # rounding for analysis
 
+#pollination_2009 <- pollination_2009 %>%
+#  mutate(patch_ID = paste(block, patch, species, sep = ".")) %>%
+#  left_join(count_repro_plants, by = "patch_ID")
 
 # separating out species into separate dataframes for analysis
 AB_pollination <- pollination_2009 %>%
@@ -227,7 +239,7 @@ SS_pollination <- pollination_2009 %>%
 
 ###### pollination models ######
 # Aristida beyrichiana
-AB_mod <- glmmTMB(pollination_avg ~ ptype + dist_num + (1|block/patch/corner), 
+AB_mod <- glmmTMB(pollination_avg ~ ptype + dist_num +(1|block/patch/corner), 
                   data = AB_pollination,
                   family = betabinomial(),
                   weights = total_est_fl_avg)
