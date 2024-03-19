@@ -411,7 +411,7 @@ plotAV_mod1 <- predictAV_mod1 %>% ggplot(aes(x = x, y = predicted)) +
   theme(panel.border = element_rect(colour = "black", fill=NA, linewidth=1.5))
 plotAV_mod1
 # exporting
-pdf(file = "FigureS2.pdf", width = 10, height = 7)
+svglite(file = "FigureS2.svg", width = 10, height = 7)
 plotAV_mod1
 dev.off()
 
