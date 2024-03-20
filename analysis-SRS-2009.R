@@ -154,7 +154,7 @@ figure2 <- figure2 + facet_grid(rows = vars(species), scales = "free") +
 figure2
 
 # exporting
-svglite(file = "Figure2.svg", width = 9, height = 11)
+pdf(file = "Figure2.pdf", width = 9, height = 11)
 plot(figure2)
 dev.off()
 
@@ -348,7 +348,7 @@ figureS1 <- figureS1 + facet_grid(rows = vars(species), scales = "free") +
 figureS1
 
 # exporting
-svglite(file = "FigureS1.svg", width = 9, height = 11)
+pdf(file = "FigureS1.pdf", width = 9, height = 11)
 plot(figureS1)
 dev.off()
 
@@ -407,11 +407,11 @@ plotAV_mod1 <- predictAV_mod1 %>% ggplot(aes(x = x, y = predicted)) +
        x = "Patch Type",
        y = "Anthaenantia Seed Production") +
   theme(axis.text = element_text(size = 20)) +
-  theme(axis.title = element_text(size = 22)) +
-  theme(panel.border = element_rect(colour = "black", fill=NA, linewidth=1.5))
+  theme(axis.title = element_text(size = 22))
+  #theme(panel.border = element_rect(colour = "black", fill=NA, linewidth=1.5))
 plotAV_mod1
 # exporting
-svglite(file = "FigureS2.svg", width = 10, height = 7)
+pdf(file = "FigureS2.pdf", width = 10, height = 7)
 plotAV_mod1
 dev.off()
 
@@ -502,7 +502,7 @@ figure3 <- figure3 + facet_grid(rows = vars(species), scales = "free") +
   theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270))
 figure3
 
-svglite(file = "Figure3.svg", width = 7, height = 12)
+pdf(file = "Figure3.pdf", width = 7, height = 12)
 plot(figure3)
 dev.off()
 
