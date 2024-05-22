@@ -55,13 +55,15 @@ AB_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|bl
                        ziformula = ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
                        data = AB_reproduction,
                        family = "truncated_nbinom2")
-
 summary(AB_repr_mod)
 plot(simulateResiduals(AB_repr_mod))
-Anova(AB_repr_mod, type = "III")
-#AB_repr_mod.posthoc <- emtrends(AB_repr_mod, pairwise ~ ptype, var = "dist_num")
-#AB_repr_mod.posthoc
-AB_repr_mod.posthoc <- emmeans(AB_repr_mod, "ptype")
+# Anova
+Anova(AB_repr_mod, type = "III", component = "cond")
+Anova(AB_repr_mod, type = "III", component = "zi")
+# Pairwise comparisons
+AB_repr_mod.posthoc <- emmeans(AB_repr_mod, ~ptype, comp = "cond")
+pairs(AB_repr_mod.posthoc)
+AB_repr_mod.posthoc <- emmeans(AB_repr_mod, ~ptype, comp = "zi")
 pairs(AB_repr_mod.posthoc)
 
 # Anthaenantia villosa
@@ -71,10 +73,12 @@ AV_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|bl
                        family = "truncated_nbinom2")
 summary(AV_repr_mod)
 plot(simulateResiduals(AV_repr_mod))
-Anova(AV_repr_mod, type = "III")
-#AV_repr_mod.posthoc <- emtrends(AV_repr_mod, pairwise ~ ptype, var = "dist_num")
-#AV_repr_mod.posthoc
-AV_repr_mod.posthoc <- emmeans(AV_repr_mod, "ptype")
+Anova(AV_repr_mod, type = "III", component = "cond")
+Anova(AV_repr_mod, type = "III", component = "zi")
+# Pairwise comparisons
+AV_repr_mod.posthoc <- emmeans(AV_repr_mod, ~ptype, comp = "cond")
+pairs(AV_repr_mod.posthoc)
+AV_repr_mod.posthoc <- emmeans(AV_repr_mod, ~ptype, comp = "zi")
 pairs(AV_repr_mod.posthoc)
 
 # Carphephorus bellidifolius 
@@ -84,10 +88,12 @@ CB_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|bl
                        family = "truncated_nbinom2")
 summary(CB_repr_mod)
 plot(simulateResiduals(CB_repr_mod))
-Anova(CB_repr_mod, type = "III")
-#CB_repr_mod.posthoc <- emtrends(CB_repr_mod, pairwise ~ ptype, var = "dist_num")
-#CB_repr_mod.posthoc
-CB_repr_mod.posthoc <- emmeans(CB_repr_mod, "ptype")
+Anova(CB_repr_mod, type = "III", component = "cond")
+Anova(CB_repr_mod, type = "III", component = "zi")
+# Pairwise comparisons
+CB_repr_mod.posthoc <- emmeans(CB_repr_mod, ~ptype, comp = "cond")
+pairs(CB_repr_mod.posthoc)
+CB_repr_mod.posthoc <- emmeans(CB_repr_mod, ~ptype, comp = "zi")
 pairs(CB_repr_mod.posthoc)
 
 # Liatris earlei 
@@ -97,10 +103,12 @@ LE_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|bl
                        family = "truncated_nbinom2")
 summary(LE_repr_mod)
 plot(simulateResiduals(LE_repr_mod))
-Anova(LE_repr_mod, type = "III")
-#LE_repr_mod.posthoc <- emtrends(LE_repr_mod, pairwise ~ ptype, var = "dist_num")
-#LE_repr_mod.posthoc
-LE_repr_mod.posthoc <- emmeans(LE_repr_mod, "ptype")
+Anova(LE_repr_mod, type = "III", component = "cond")
+Anova(LE_repr_mod, type = "III", component = "zi")
+# Pairwise comparisons
+LE_repr_mod.posthoc <- emmeans(LE_repr_mod, ~ptype, comp = "cond")
+pairs(LE_repr_mod.posthoc)
+LE_repr_mod.posthoc <- emmeans(LE_repr_mod, ~ptype, comp = "zi")
 pairs(LE_repr_mod.posthoc)
 
 #Sorghastrum secundum
@@ -108,13 +116,14 @@ SS_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|bl
                        ziformula = ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
                        data = SS_reproduction,
                        family = "truncated_nbinom2")
-
 summary(SS_repr_mod)
 plot(simulateResiduals(SS_repr_mod))
-Anova(SS_repr_mod, type = "III")
-#SS_repr_mod.posthoc <- emtrends(SS_repr_mod, pairwise ~ ptype, var = "dist_num")
-#SS_repr_mod.posthoc
-SS_repr_mod.posthoc <- emmeans(SS_repr_mod, "ptype")
+Anova(SS_repr_mod, type = "III", component = "cond")
+Anova(SS_repr_mod, type = "III", component = "zi")
+# Pairwise comparisons
+SS_repr_mod.posthoc <- emmeans(SS_repr_mod, ~ptype, comp = "cond")
+pairs(SS_repr_mod.posthoc)
+SS_repr_mod.posthoc <- emmeans(SS_repr_mod, ~ptype, comp = "zi")
 pairs(SS_repr_mod.posthoc)
 
 
@@ -525,26 +534,25 @@ summary(AB_mod1)
 plot(simulateResiduals(AB_mod1))
 #check_overdispersion(AB_mod1)
 #check_zeroinflation(AB_mod1)
-Anova(AB_mod1, type = "III") 
-Anova(AB_mod1, type = "III", component = "zi") # zero count process
-AB_mod1.posthoc <- emmeans(AB_mod1, ~ ptype) # posthoc
+Anova(AB_mod1, type = "III", component = "cond")
+Anova(AB_mod1, type = "III", component = "zi")
+# Post hoc
+AB_mod1.posthoc <- emmeans(AB_mod1, ~ ptype, comp = "cond") # posthoc
 pairs(AB_mod1.posthoc)
-AB_mod1.posthoc.zero <- emmeans(AB_mod1, ~ ptype, component = "zi") # posthoc zero count process
+AB_mod1.posthoc.zero <- emmeans(AB_mod1, ~ ptype, comp = "zi") # posthoc zero count process
 pairs(AB_mod1.posthoc.zero)
 
 
 
 # Anthaenantia villosa
 AV_mod1 <- glmmTMB(plant_seed_prod ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
-                          ziformula = ~ ptype * dist_num + log_plant_size + (1|block/patch/corner),
+                          ziformula = ~ ptype + dist_num + (1|block/patch/corner),
                           data = AV_pollination,
                           family = "truncated_nbinom2")
 summary(AV_mod1)
 plot(simulateResiduals(AV_mod1))
 #check_overdispersion(AV_mod1)
 #check_zeroinflation(AV_mod1) 
-AV_mod1.posthoc <- emmeans(AV_mod1, "ptype")
-pairs(AV_mod1.posthoc)
 Anova(AV_mod1, type = "III", component = "cond")
 Anova(AV_mod1, type = "III", component = "zi")
 (exp(-0.4273)-1) *100
@@ -591,7 +599,8 @@ summary(CB_mod1)
 plot(simulateResiduals(CB_mod1))
 #check_overdispersion(CB_mod1)
 #check_zeroinflation(CB_mod1) 
-Anova(CB_mod1, type = "III")
+Anova(CB_mod1, type = "III", component = "cond")
+Anova(CB_mod1, type = "III", component = "zi")
 CB_mod1.posthoc <- emmeans(CB_mod1, "ptype")
 pairs(CB_mod1.posthoc)
 
@@ -605,7 +614,8 @@ summary(LE_mod1)
 plot(simulateResiduals(LE_mod1))
 #check_overdispersion(LE_mod1)
 #check_zeroinflation(LE_mod1)
-Anova(LE_mod1, type = "III")
+Anova(LE_mod1, type = "III", component = "cond")
+Anova(LE_mod1, type = "III", component = "zi")
 LE_mod1.posthoc <- emmeans(LE_mod1, "ptype")
 pairs(LE_mod1.posthoc)
 
@@ -619,7 +629,8 @@ summary(SS_mod1)
 plot(simulateResiduals(SS_mod1))
 #check_overdispersion(SS_mod1)
 #check_zeroinflation(SS_mod1)
-Anova(SS_mod1, type = "III")
+Anova(SS_mod1, type = "III", component = "cond")
+Anova(SS_mod1, type = "III", component = "zi")
 SS_mod1.posthoc <- emmeans(SS_mod1, "ptype")
 pairs(SS_mod1.posthoc)
 
@@ -710,53 +721,36 @@ dev.off()
 
 
 
-
-####### number of flowering structures ###########
-# if there is a significant or marginally significant response of seed production to edge proximity, 
-### testing response of number of flowering structures
-
-# Aristida beyrichiana
-AB_mod_fl <- glmmTMB(total_no_structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
-                     data = AB_pollination,
-                     family = "nbinom2")
-summary(AB_mod_fl)
-plot(simulateResiduals(AB_mod_fl))
-Anova(AB_mod_fl, type = "III")
-AB_mod_fl.posthoc <- emmeans(AB_mod_fl, "ptype")
-pairs(AB_mod_fl.posthoc)
-
-# Anthaenantia villosa
-AV_mod_fl <- glmmTMB(total_no_structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
-                     data = AV_pollination,
-                     family = "nbinom2")
-summary(AV_mod_fl)
-Anova(AV_mod_fl, type = "III")
-plot(simulateResiduals(AV_mod_fl))
+####### Plant size ######
+# testing if plant size of reproductive plants is affected by edge or patch type
+AB_size <- glmmTMB(log_plant_size ~ ptype * dist_num + (1|block/patch/corner),
+                   data = AB_reproduction,
+                   family = "gaussian")
+summary(AB_size)
+plot(simulateResiduals(AB_size))
 
 
-# Carphephorus bellidifolius 
-CB_mod_fl <- glmmTMB(total_no_structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
-                     data = CB_pollination,
-                     family = "nbinom2")
-summary(CB_mod_fl)
-plot(simulateResiduals(CB_mod_fl))
-Anova(CB_mod_fl, type = "III")
+AV_size <- glmmTMB(log_plant_size ~ ptype + dist_num + (1|block/patch/corner),
+                   data = AV_reproduction,
+                   family = "gaussian")
+summary(AV_size)
+plot(simulateResiduals(AV_size))
 
+CB_size <- glmmTMB(log_plant_size ~ ptype + dist_num + (1|block/patch/corner),
+                   data = CB_reproduction,
+                   family = "gaussian")
+summary(CB_size)
+plot(simulateResiduals(CB_size))
 
-# Sorghastrum secundum
-SS_mod_fl <- glmmTMB(total_no_structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
-                     data = SS_pollination,
-                     family = "nbinom2")
-summary(SS_mod_fl)
-plot(simulateResiduals(SS_mod_fl))
-Anova(SS_mod_fl, type = "III")
+LE_size <- glmmTMB(log_plant_size ~ ptype + dist_num + (1|block/patch/corner),
+                   data = LE_reproduction,
+                   family = "gaussian")
+summary(LE_size)
+plot(simulateResiduals(LE_size))
 
-
-
-
-
-
-
-
-
+SS_size <- glmmTMB(log_plant_size ~ ptype + dist_num + (1|block/patch/corner),
+                   data = SS_reproduction,
+                   family = "gaussian")
+summary(SS_size)
+plot(simulateResiduals(SS_size))
 
