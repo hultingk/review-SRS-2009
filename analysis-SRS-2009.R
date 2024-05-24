@@ -57,6 +57,7 @@ AB_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|bl
                        family = "truncated_nbinom2")
 summary(AB_repr_mod)
 plot(simulateResiduals(AB_repr_mod))
+#check_overdispersion(AB_repr_mod)
 # Anova
 Anova(AB_repr_mod, type = "III", component = "cond")
 Anova(AB_repr_mod, type = "III", component = "zi")
@@ -541,8 +542,10 @@ AB_mod1.posthoc <- emmeans(AB_mod1, ~ ptype, comp = "cond") # posthoc
 pairs(AB_mod1.posthoc)
 AB_mod1.posthoc.zero <- emmeans(AB_mod1, ~ ptype, comp = "zi") # posthoc zero count process
 pairs(AB_mod1.posthoc.zero)
+(exp(0.033879) - 1) * 100 # for every 1 m away from edge, seed production increased by %3.45
 
-
+((3.181287 - 0.9363687)/0.9363687) *100 # increased by 239.7% from 0 to 36.10 m
+(exp(0.033879 * 36.10) - 1) * 100 # %239.7473 change in seed production from 0m to 36.10m
 
 # Anthaenantia villosa
 AV_mod1 <- glmmTMB(plant_seed_prod ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
@@ -555,39 +558,7 @@ plot(simulateResiduals(AV_mod1))
 #check_zeroinflation(AV_mod1) 
 Anova(AV_mod1, type = "III", component = "cond")
 Anova(AV_mod1, type = "III", component = "zi")
-(exp(-0.4273)-1) *100
-
-## plotting Anthaenantia patch type differences
-AV_mod1.stat.test <- tibble::tribble( # adding p-values above graph
-  ~group1, ~group2,   ~p.adj,
-  "Connected",     "Rectangle", "0.12",
-  "Connected",     "Winged", "0.99",
-  "Rectangle",     "Winged", "0.07"
-)
-predictAV_mod1 <- ggpredict(AV_mod1, terms=c("ptype [all]"), back.transform = T)
-plotAV_mod1 <- predictAV_mod1 %>% ggplot(aes(x = x, y = predicted)) +
-  geom_jitter(aes(x = ptype, y = plant_seed_prod), data = AV_pollination, alpha = 0.2, width = 0.1, height = 0.15, size = 3)+ 
-  geom_point(size = 2)+ 
-  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.1, linewidth = 1.5) +
-  theme_minimal()+
-  stat_pvalue_manual(
-    AV_mod1.stat.test, 
-    size = 4,
-    bracket.size = 0.7,
-    y.position = 10000, step.increase = 0.1,
-    label = "p.adj"
-  ) +
-  labs(title = NULL,
-       x = "Patch Type",
-       y = "Anthaenantia Seed Production") +
-  theme(axis.text = element_text(size = 20)) +
-  theme(axis.title = element_text(size = 22))
-  #theme(panel.border = element_rect(colour = "black", fill=NA, linewidth=1.5))
-plotAV_mod1
-# exporting
-pdf(file = "FigureS2.pdf", width = 10, height = 7)
-plotAV_mod1
-dev.off()
+(exp(0.02363 * 36.10) - 1) *100 #%134.6777 increase from 0m to 36.10m
 
 
 # Carphephorus bellidifolius 
@@ -603,6 +574,7 @@ Anova(CB_mod1, type = "III", component = "cond")
 Anova(CB_mod1, type = "III", component = "zi")
 CB_mod1.posthoc <- emmeans(CB_mod1, "ptype")
 pairs(CB_mod1.posthoc)
+(exp(0.022863 * 36.10) - 1) *100 #%128.2689 increase from 0m to 36.10m
 
 
 # Liatris earlei 
@@ -633,6 +605,7 @@ Anova(SS_mod1, type = "III", component = "cond")
 Anova(SS_mod1, type = "III", component = "zi")
 SS_mod1.posthoc <- emmeans(SS_mod1, "ptype")
 pairs(SS_mod1.posthoc)
+(exp(0.020996 * 36.10) - 1) *100 #%113.3909 increase from 0m to 36.10m
 
 
 ###### seed production plotting: Figure 3 ######
@@ -675,11 +648,11 @@ LE_non_zero <- LE_pollination %>%
   filter(plant_seed_prod != 0)
 
 figure3_grass <- mod1_predict_grass %>% ggplot(aes(x = x, y = predicted)) +
-  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = SS_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
-  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
-  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AV_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  #geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = SS_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+ # geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  #geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AV_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
   geom_line(aes(x, predicted, linetype = group)) +
-  geom_line(aes(x, predicted), color = "red", linewidth = 1.5) +
+  geom_line(aes(x, predicted), color = "royalblue", linewidth = 1.5) +
   geom_ribbon(aes(x = x, ymin = conf.low, ymax = conf.high),
               alpha = 0.2) +
   theme_bw() +
@@ -695,10 +668,10 @@ figure3_grass <- mod1_predict_grass %>% ggplot(aes(x = x, y = predicted)) +
 figure3_grass
 
 figure3_forb <- mod1_predict_forb %>% ggplot(aes(x = x, y = predicted)) +
-  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = CB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
-  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = LE_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  #geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = CB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+ # geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = LE_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
   geom_line(aes(x, predicted, linetype = group)) +
-  geom_line(aes(x, predicted), color = "red", linewidth = 1.5) +
+  geom_line(aes(x, predicted), color = "royalblue", linewidth = 1.5) +
   geom_ribbon(aes(x = x, ymin = conf.low, ymax = conf.high),
               alpha = 0.2) +
   theme_bw() +
