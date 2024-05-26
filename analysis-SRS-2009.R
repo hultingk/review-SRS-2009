@@ -28,6 +28,9 @@ pollination_2009 <- pollination_2009 %>%
   mutate(no_basal_fl = ifelse(is.na(no_basal_fl), 0, no_basal_fl)) %>% # NAs = no basal flowering stalks on these species
   mutate(no.structures = no_basal_fl + no_axil_fl)
 
+pollination_2009 %>%
+  count(reproductive)
+
 # subsetting by species - keeping all plants, NA for reproduction = dead plant, excluded from analysis
 AB_reproduction <- pollination_2009 %>%
   filter(species == "Aristida") %>%
@@ -62,10 +65,47 @@ plot(simulateResiduals(AB_repr_mod))
 Anova(AB_repr_mod, type = "III", component = "cond")
 Anova(AB_repr_mod, type = "III", component = "zi")
 # Pairwise comparisons
-AB_repr_mod.posthoc <- emmeans(AB_repr_mod, ~ptype, comp = "cond")
-pairs(AB_repr_mod.posthoc)
 AB_repr_mod.posthoc <- emmeans(AB_repr_mod, ~ptype, comp = "zi")
 pairs(AB_repr_mod.posthoc)
+
+AB_repr_mod.posthoc <- emmeans(AB_repr_mod, ~ptype, comp = "cond")
+pairs(AB_repr_mod.posthoc)
+
+((exp(0.033015 * 36.1) - exp(0.033015*0))/exp(0.033015*0)) *100 # increased by 229% from 0 to 36.10 m
+(exp(0.033015 * 36.10) - 1) * 100 # %229 change in flowering abundance from 0m to 36.10m
+
+
+# plotting: patch type
+predictAB_repr_mod <- ggpredict(AB_repr_mod, terms=c("ptype"), type = "zi_random", back.transform = T, allow.new.levels=TRUE)
+predictAB_repr_mod <- predictAB_repr_mod %>%
+  mutate(species = "Aristida")
+
+AB.stat.test <- tibble::tribble(
+  ~group1, ~group2,   ~p.adj,
+  "Connected",     "Winged", "0.02",
+  "Connected",     "Rectangle", "n.s.",
+  "Rectangle",     "Winged", "n.s."
+)
+predictAB_repr_mod %>%
+  ggplot() +
+  geom_point(aes(x = x, y = predicted), size = 4.5, data = predictAB_repr_mod)+ 
+  geom_errorbar(aes(x = x, y = predicted, ymin = conf.low, ymax = conf.high),data = predictAB_repr_mod, width = 0.15, linewidth = 2) +
+  theme_classic() +
+  geom_jitter(aes(x = ptype, y = no.structures), data = AB_reproduction, alpha = 0.1, width = 0.1, height = 0.1, size = 3.8) +
+  labs(title = NULL,
+      x = "Patch Type",
+      y = "Number of flowering structures") +
+  stat_pvalue_manual(
+    AB.stat.test, 
+    size = 8,
+    bracket.size = 1,
+    y.position = 250, step.increase = 0.12,
+    label = "p.adj"
+    ) +
+  theme(axis.text = element_text(size = 24)) +
+  theme(axis.title = element_text(size = 28))
+
+
 
 # Anthaenantia villosa
 AV_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner),
@@ -82,6 +122,9 @@ pairs(AV_repr_mod.posthoc)
 AV_repr_mod.posthoc <- emmeans(AV_repr_mod, ~ptype, comp = "zi")
 pairs(AV_repr_mod.posthoc)
 
+(exp(0.027671 * 36.10) - 1) * 100 # %171.5356 change in flowering abundance from 0m to 36.10m
+
+
 # Carphephorus bellidifolius 
 CB_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner),
                        ziformula = ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
@@ -96,6 +139,9 @@ CB_repr_mod.posthoc <- emmeans(CB_repr_mod, ~ptype, comp = "cond")
 pairs(CB_repr_mod.posthoc)
 CB_repr_mod.posthoc <- emmeans(CB_repr_mod, ~ptype, comp = "zi")
 pairs(CB_repr_mod.posthoc)
+
+(exp(0.016823 * 36.10) - 1) * 100 # %84 change in flowering abundance from 0m to 36.10m
+
 
 # Liatris earlei 
 LE_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner),
@@ -112,6 +158,9 @@ pairs(LE_repr_mod.posthoc)
 LE_repr_mod.posthoc <- emmeans(LE_repr_mod, ~ptype, comp = "zi")
 pairs(LE_repr_mod.posthoc)
 
+(exp(0.04248 * 36.10) - 1) * 100 # %363 change in flowering abundance from 0m to 36.10m
+
+
 #Sorghastrum secundum
 SS_repr_mod <- glmmTMB(no.structures ~ ptype + dist_num + log_plant_size + (1|block/patch/corner),
                        ziformula = ~ ptype + dist_num + log_plant_size + (1|block/patch/corner), 
@@ -126,6 +175,8 @@ SS_repr_mod.posthoc <- emmeans(SS_repr_mod, ~ptype, comp = "cond")
 pairs(SS_repr_mod.posthoc)
 SS_repr_mod.posthoc <- emmeans(SS_repr_mod, ~ptype, comp = "zi")
 pairs(SS_repr_mod.posthoc)
+
+(exp(0.021516 * 36.10) - 1) * 100 # %117.4345 change in flowering abundance from 0m to 36.10m
 
 
 ###### reproductive status plotting: Figure 2a #####
@@ -542,7 +593,6 @@ AB_mod1.posthoc <- emmeans(AB_mod1, ~ ptype, comp = "cond") # posthoc
 pairs(AB_mod1.posthoc)
 AB_mod1.posthoc.zero <- emmeans(AB_mod1, ~ ptype, comp = "zi") # posthoc zero count process
 pairs(AB_mod1.posthoc.zero)
-(exp(0.033879) - 1) * 100 # for every 1 m away from edge, seed production increased by %3.45
 
 ((3.181287 - 0.9363687)/0.9363687) *100 # increased by 239.7% from 0 to 36.10 m
 (exp(0.033879 * 36.10) - 1) * 100 # %239.7473 change in seed production from 0m to 36.10m
@@ -636,16 +686,16 @@ mod1_predict_forb$plant_type = "Asteraceae (insect pollinated)"
 
 
 
-SS_non_zero <- SS_pollination %>%
-  filter(plant_seed_prod != 0)
-AB_non_zero <- AB_pollination %>%
-  filter(plant_seed_prod != 0)
-AV_non_zero <- AV_pollination %>%
-  filter(plant_seed_prod != 0)
-CB_non_zero <- CB_pollination %>%
-  filter(plant_seed_prod != 0)
-LE_non_zero <- LE_pollination %>%
-  filter(plant_seed_prod != 0)
+#SS_non_zero <- SS_pollination %>%
+#  filter(plant_seed_prod != 0)
+#AB_non_zero <- AB_pollination %>%
+#  filter(plant_seed_prod != 0)
+#AV_non_zero <- AV_pollination %>%
+#  filter(plant_seed_prod != 0)
+#CB_non_zero <- CB_pollination %>%
+#  filter(plant_seed_prod != 0)
+#LE_non_zero <- LE_pollination %>%
+#  filter(plant_seed_prod != 0)
 
 figure3_grass <- mod1_predict_grass %>% ggplot(aes(x = x, y = predicted)) +
   #geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = SS_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
@@ -694,7 +744,7 @@ dev.off()
 
 
 
-####### Plant size ######
+####### Plant size (excluded from manuscript) ######
 # testing if plant size of reproductive plants is affected by edge or patch type
 AB_size <- glmmTMB(log_plant_size ~ ptype * dist_num + (1|block/patch/corner),
                    data = AB_reproduction,
@@ -727,3 +777,24 @@ SS_size <- glmmTMB(log_plant_size ~ ptype + dist_num + (1|block/patch/corner),
 summary(SS_size)
 plot(simulateResiduals(SS_size))
 
+
+
+
+
+
+
+##### Percentage of reproductive plants in other years #####
+transplants_2012 <- read.csv("Transplants_2012.csv")
+transplants_2012%>%
+  filter(Species %in% c("AB", "AV", "CB", "LE", "SS")) %>%
+  count(Reproductive.status) # 22% not flowering
+
+transplants_2015 <- read.csv("Transplant_2015.csv")
+transplants_2015%>%
+  filter(Species %in% c("AB", "AV", "CB", "LE", "SS")) %>%
+  count(Repr.) # 28% not flowering
+
+transplants_2017 <- read.csv("Transplants_2017.csv")
+transplants_2017%>%
+  filter(Species %in% c("AB", "AV", "CB", "LE", "SS")) %>%
+  count(Repro.Status) # 41% not flowering
