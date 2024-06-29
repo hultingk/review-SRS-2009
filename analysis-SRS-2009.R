@@ -217,13 +217,13 @@ figure2a_grass <- repr_predict_grass %>%
   labs(title = NULL,
        x = "Distance from Edge",
        y = "Likelihood of Vegetative Status") +
-  theme(axis.text = element_text(size = 16)) +
-  theme(axis.title = element_text(size = 18)) +
+  theme(axis.text = element_text(size = 18)) +
+  theme(axis.title = element_text(size = 24)) +
   theme(legend.position = "none") +
   scale_y_continuous(labels = label_number(accuracy = 0.1), limits = c(0,1)) +
   facet_grid(rows = vars(species), cols = vars(plant_type), scales = "fixed", drop = T) +
-  theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270)) +
-  theme(strip.text.x = element_text(size = 16, colour = "black"))
+  theme(strip.text.y = element_text(size = 20, colour = "black", angle = 270)) +
+  theme(strip.text.x = element_text(size = 20, colour = "black"))
 figure2a_grass
 
 figure2a_forb <- repr_predict_forb %>%
@@ -235,18 +235,18 @@ figure2a_forb <- repr_predict_forb %>%
   labs(title = NULL,
        x = "Distance from Edge",
        y = NULL) +
-  theme(axis.text = element_text(size = 16)) +
-  theme(axis.title = element_text(size = 18)) +
-  theme(legend.title = element_text(size = 16)) +
-  theme(legend.text =element_text(size = 14)) +
+  theme(axis.text = element_text(size = 18)) +
+  theme(axis.title = element_text(size = 24)) +
+  theme(legend.title = element_text(size = 18)) +
+  theme(legend.text =element_text(size = 16)) +
   theme(plot.margin=unit(c(0.2,1,3,0.5),"cm"))+
-  theme(legend.position = c(0.2, -0.3)) +
+  theme(legend.position = c(0.2, -0.37)) +
   scale_y_continuous(labels = label_number(accuracy = 0.1), limits = c(0,1)) +
   guides(linetype = guide_legend(title = "Patch Type")) +
   theme(legend.key.width=unit(2,"cm")) + 
   facet_grid(rows = vars(species), cols = vars(plant_type), scales = "free", drop = T) +
-  theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270)) +
-  theme(strip.text.x = element_text(size = 16, colour = "black"))
+  theme(strip.text.y = element_text(size = 20, colour = "black", angle = 270)) +
+  theme(strip.text.x = element_text(size = 20, colour = "black"))
 figure2a_forb
 
 
@@ -295,13 +295,13 @@ figure2b_grass <- repr_predict_grass %>%
   labs(title = NULL,
        x = "Distance from Edge",
        y = "Number of Flowering Structures") +
-  theme(axis.text = element_text(size = 16)) +
-  theme(axis.title = element_text(size = 18)) +
+  theme(axis.text = element_text(size = 18)) +
+  theme(axis.title = element_text(size = 24)) +
   theme(legend.position = "none") +
   #scale_y_continuous(labels = label_number(accuracy = 0.1), limits = c(0,1)) +
   facet_grid(rows = vars(species), cols = vars(plant_type), scales = "free", drop = T) +
-  theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270)) +
-  theme(strip.text.x = element_text(size = 16, colour = "black"))
+  theme(strip.text.y = element_text(size = 20, colour = "black", angle = 270)) +
+  theme(strip.text.x = element_text(size = 20, colour = "black"))
 figure2b_grass
 
 figure2b_forb <- repr_predict_forb %>%
@@ -315,18 +315,18 @@ figure2b_forb <- repr_predict_forb %>%
   labs(title = NULL,
        x = "Distance from Edge",
        y = NULL) +
-  theme(axis.text = element_text(size = 16)) +
-  theme(axis.title = element_text(size = 18)) +
-  theme(legend.title = element_text(size = 16)) +
-  theme(legend.text =element_text(size = 14)) +
+  theme(axis.text = element_text(size = 18)) +
+  theme(axis.title = element_text(size = 24)) +
+  theme(legend.title = element_text(size = 18)) +
+  theme(legend.text =element_text(size = 16)) +
   theme(plot.margin=unit(c(0.2,1,3,0.5),"cm"))+
-  theme(legend.position = c(0.2, -0.3)) +
+  theme(legend.position = c(0.2, -0.37)) +
   #scale_y_continuous(labels = label_number(accuracy = 0.1), limits = c(0,1)) +
   guides(linetype = guide_legend(title = "Patch Type")) +
   theme(legend.key.width=unit(2,"cm")) + 
   facet_grid(rows = vars(species), cols = vars(plant_type), scales = "free", drop = T) +
-  theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270)) +
-  theme(strip.text.x = element_text(size = 16, colour = "black"))
+  theme(strip.text.y = element_text(size = 20, colour = "black", angle = 270)) +
+  theme(strip.text.x = element_text(size = 20, colour = "black"))
 figure2b_forb
 
 
@@ -338,7 +338,7 @@ fig2b
 
 
 
-figure2 <- cowplot::plot_grid(NULL, fig2a, NULL, fig2b, nrow=4, ncol=1, labels = c("","A","", "B"), label_size = 25,
+figure2 <- cowplot::plot_grid(NULL, fig2a, NULL, fig2b, nrow=4, ncol=1, labels = c("","A","", "B"), label_size = 28,
                               label_x = 0,
                               label_y = 1.05,
                               rel_heights = c(0.05, 1, 0.05, 1))
@@ -709,12 +709,12 @@ figure3_grass <- mod1_predict_grass %>% ggplot(aes(x = x, y = predicted)) +
   labs(title = NULL,
        x = "Distance from Edge",
        y = "Seed Production") +
-  theme(axis.text = element_text(size = 16)) +
-  theme(axis.title = element_text(size = 18)) +
+  theme(axis.text = element_text(size = 18)) +
+  theme(axis.title = element_text(size = 24)) +
   theme(legend.position = "none") +
   facet_grid(rows = vars(species), cols = vars(plant_type), scales = "free", drop = T) +
-  theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270)) +
-  theme(strip.text.x = element_text(size = 16, colour = "black"))
+  theme(strip.text.y = element_text(size = 20, colour = "black", angle = 270)) +
+  theme(strip.text.x = element_text(size = 20, colour = "black"))
 figure3_grass
 
 figure3_forb <- mod1_predict_forb %>% ggplot(aes(x = x, y = predicted)) +
@@ -728,12 +728,12 @@ figure3_forb <- mod1_predict_forb %>% ggplot(aes(x = x, y = predicted)) +
   labs(title = NULL,
        x = "Distance from Edge",
        y = NULL) +
-  theme(axis.text = element_text(size = 16)) +
-  theme(axis.title = element_text(size = 18)) +
+  theme(axis.text = element_text(size = 18)) +
+  theme(axis.title = element_text(size = 24)) +
   theme(legend.position = "none") +
   facet_grid(rows = vars(species), cols = vars(plant_type), scales = "free", drop = T) +
-  theme(strip.text.y = element_text(size = 16, colour = "black", angle = 270)) +
-  theme(strip.text.x = element_text(size = 16, colour = "black"))
+  theme(strip.text.y = element_text(size = 20, colour = "black", angle = 270)) +
+  theme(strip.text.x = element_text(size = 20, colour = "black"))
 figure3_forb
 
 left_column <- cowplot::plot_grid(figure3_forb, NULL, nrow = 2, ncol = 1, rel_heights = c(2.44,1))
