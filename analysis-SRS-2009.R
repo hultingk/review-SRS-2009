@@ -686,21 +686,21 @@ mod1_predict_forb$plant_type = "Asteraceae (insect pollinated)"
 
 
 
-#SS_non_zero <- SS_pollination %>%
-#  filter(plant_seed_prod != 0)
-#AB_non_zero <- AB_pollination %>%
-#  filter(plant_seed_prod != 0)
-#AV_non_zero <- AV_pollination %>%
-#  filter(plant_seed_prod != 0)
-#CB_non_zero <- CB_pollination %>%
-#  filter(plant_seed_prod != 0)
-#LE_non_zero <- LE_pollination %>%
-#  filter(plant_seed_prod != 0)
+SS_non_zero <- SS_pollination %>%
+  filter(plant_seed_prod != 0)
+AB_non_zero <- AB_pollination %>%
+  filter(plant_seed_prod != 0)
+AV_non_zero <- AV_pollination %>%
+  filter(plant_seed_prod != 0)
+CB_non_zero <- CB_pollination %>%
+  filter(plant_seed_prod != 0)
+LE_non_zero <- LE_pollination %>%
+  filter(plant_seed_prod != 0)
 
 figure3_grass <- mod1_predict_grass %>% ggplot(aes(x = x, y = predicted)) +
-  #geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = SS_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
- # geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
-  #geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AV_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = SS_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = AV_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
   geom_line(aes(x, predicted, linetype = group)) +
   geom_line(aes(x, predicted), color = "royalblue", linewidth = 1.5) +
   geom_ribbon(aes(x = x, ymin = conf.low, ymax = conf.high),
@@ -718,8 +718,8 @@ figure3_grass <- mod1_predict_grass %>% ggplot(aes(x = x, y = predicted)) +
 figure3_grass
 
 figure3_forb <- mod1_predict_forb %>% ggplot(aes(x = x, y = predicted)) +
-  #geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = CB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
- # geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = LE_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = CB_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
+  geom_jitter(aes(x = dist_num, y = plant_seed_prod), data = LE_non_zero, alpha = 0.3, width = 0.4, height = 0.2) + 
   geom_line(aes(x, predicted, linetype = group)) +
   geom_line(aes(x, predicted), color = "royalblue", linewidth = 1.5) +
   geom_ribbon(aes(x = x, ymin = conf.low, ymax = conf.high),
