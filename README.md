@@ -17,6 +17,9 @@ Each row contains data for one structure on one plant (3 structures/plant).
 | ptype    | Patch type (Center, Connected, Rectangle, Winged)      |
 | live  | 0 = dead, 1 = alive, NA = not recorded |
 | reproductive    | 0 = not reproductive, 1 = reproductive, NA = not recorded or dead plant  |
+| length    | length of plant measured along long axis (cm), NA = dead plant or not recorded |
+| width    |  width of plant perpendicular to length measure (cm) , NA = dead plant or not recorded |
+| height    | height of plant (cm), NA = dead plant or not recorded  |
 | no.viable_seeds | Number of fruits that contained a developed seed, NA = non-reproductive plant or not recorded |
 | no.nonviable_seeds | Number of fruits that did not contain a developed seed, NA = non-reproductive plant or not recorded |
 | notes | Notes on seed data, NA = no notes |
